@@ -1,6 +1,7 @@
 <div align=center>
 
    💻 **WCore Testing**
+   <img src="/wwwroot/img/wcore.png">
    
 </div>
 
