@@ -1,0 +1,150 @@
+﻿@page
+@model IndexModel
+@{
+	ViewData["Title"] = "ToDo List";
+}
+
+
+<div class="d-flex justify-content-center">
+	<img src="img/todolist_logo.png" class="mb-5 img-fluid">
+</div>
+
+
+
+<div class="bg-light p-1 p-md-4 border">
+	<p class="h2 text-center mb-4">Adicionar Projeto: </p>
+		
+	<form method="post" class="row">
+		<div class="mb-3 col-12 col-md-6">
+			<span>Nome:</span>
+			<input type="text" name="description" class="form-control" placeholder="...Nome do projeto"/>
+		</div>
+		<div class="mb-3 col-12 col-md-6">
+			<span>Data e hora:</span>
+			<input type="datetime-local" name="ToDoDate" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+		</div>
+		<div class="col-12 mb-2">
+			<span>Descrição:</span>
+			<textarea class="form-control" placeholder="...Descrição do projeto" rows="3" name="content"></textarea>
+		</div>
+		<div class="d-flex justify-content-center mt-4">
+			<input class="btn btn-primary" type="submit" asp-page-handler="create" value="Adicionar" />
+		</div>
+
+	</form>
+</div>
+
+<div style="height:80px"></div>
+
+
+
+<div class="my-5 d-flex justify-content-center align-items-center">
+	<div class="des-item d-flex">
+		<div class="des-item-col1 me-1"></div>
+		<div class="des-item-text h5">Projeto Finalizado Hoje</div>
+	</div>
+	<div class="des-item d-flex mx-5">
+		<div class="des-item-col2 me-1"></div>
+		<div class="des-item-text h5">Projeto Finalizado Amanhã</div>
+	</div>
+	<div class="des-item d-flex">
+		<div class="des-item-col3 me-1"></div>
+		<div class="des-item-text h5">Projeto Expirado</div>
+	</div>
+</div>
+
+
+
+<p class="h2 text-center mb-3">Meus Projetos: </p>
+<div class="mb-5">
+	<div class="accordion" id="accordionExample2">
+
+		@foreach (var item in Model.TodoModelList)
+		{
+			<div class="accordion-item px-0 mx-0">
+				<div class="accordion-header " id="headingOne">
+
+					@{
+						string ToDoBgColor = "bg-light";
+						if (item.ToDoDate < DateTime.Now) ToDoBgColor = "bg-danger bg-opacity-75";
+						else if (item.ToDoDate.Date == DateTime.Now.Date) ToDoBgColor = "bg-warning bg-opacity-75";
+						else if (item.ToDoDate.Date == DateTime.Now.AddDays(1).Date) ToDoBgColor = "bg-primary bg-opacity-75";
+
+					}
+
+					<button class="accordion-button collapsed  @ToDoBgColor" type="button"
+						data-bs-toggle="collapse" data-bs-target="#collapse@(item.Id)">
+						@item.ToDoDate.ToString("dd.MM.yyyy hh.mm") - @item.Description
+					</button>
+
+					
+
+				</div>
+				<div id="collapse@(item.Id)" class="accordion-collapse collapse "
+				 aria-labelledby="headingOne" data-bs-parent="#accordionExample2">
+					<div class="accordion-body">
+						<strong>@item.Description</strong> <span> @item.Content</span>
+					</div>
+
+					<div class="d-flex justify-content-center mb-2">
+						<div>
+							<form method="post">
+								<input class="btn btn-primary" type="submit" asp-page-handler="Done" asp-route-id=@item.Id value="Concluir" />
+							</form>
+						</div>
+						<div>
+							<form method="post">
+								<input class="btn btn-danger" type="submit" asp-page-handler="Delete2" asp-route-id=@item.Id value="Excluir" />
+							</form>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		}
+	</div>
+</div>
+
+<div style="height:80px"></div>
+
+
+
+<p class="h2 text-center mb-3">Projetos Concluidos </p>
+<div class="mb-5 row">
+	<div class="accordion" id="accordionExample">
+
+		@foreach (var item in Model.DoneModelList)
+		{
+			<div class="accordion-item px-0 mx-0 col-12">
+				<div class="accordion-header " id="headingOne">
+
+					<button class="accordion-button collapsed bg-secondary bg-opacity-75 " type="button"
+						data-bs-toggle="collapse" data-bs-target="#collapse@(item.Id)">
+						<p><s>@item.ToDoDate.ToString("dd.MM.yyyy hh.mm") - @item.Description</s></p>
+					</button>
+
+
+
+				</div>
+				<div id="collapse@(item.Id)" class="accordion-collapse collapse "
+				 aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+					<div class="accordion-body">
+						<strong>@item.Description</strong>  <span> @item.Content</span>
+					</div>
+
+					<div class="d-flex justify-content-center mb-2">
+						<div>
+							<form method="post">
+								<input class="btn btn-primary" type="submit" asp-page-handler="Undone" asp-route-id=@item.Id value="Desfazer" />
+							</form>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+		}
+	</div>
+</div>
+
+<div style="height:80px"></div>
