@@ -1,11 +1,12 @@
 <div align=center>
 
-   💻 **WCore Testing**
-   <img src="/wwwroot/img/wcore.png">
+   💻 **WCore Testing Project**
+<br>
+<br> 
+   <img src="ToDoList/wwwroot/img/wcore.png" width="65%" height="65%" align="center" valign="center"/>
    
 </div>
 
-<br>
 <br>
 
 ## Recursos de Usuário
